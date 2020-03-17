@@ -8,18 +8,16 @@
         <script defer src="{{ mix('js/react/entry-client.js') }}"></script>
     </head>
     <body class="bg-paper font-sans leading-normal text-grey-darkest border-t-4 border-orange-light">
-        {!! ssr('js/react/entry-server.js')
-            ->context('packages', $packages)
-            ->fallback('<div id="app">암튼 실패함</div>')
-            ->render() !!}
+        <div id="app">
+            {!! ssr('js/react/entry-server.js')
+                ->context('packages', $packages)
+                ->fallback('<div id="fallback">암튼 실패함</div>')
+                ->render() !!}
+        </div>
 
         <script>
-            // Share the packages with the client script through a JS variable
+            // 이 블레이드 파일을 하단에 있는 js router들은 전부 적용시킨다.
             window.__PRELOADED_STATE__ = @json(['packages' => $packages])
         </script>
-        
-        <footer class="max-w-md mx-auto px-8 mt-12 mb-4 text-xs text-grey-light">
-            <h1>아무튼 아무튼 </h1>
-        </footer>
     </body>
 </html>

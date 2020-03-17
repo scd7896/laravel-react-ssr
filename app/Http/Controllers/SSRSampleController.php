@@ -5,10 +5,13 @@ use Illuminate\Http\Request;
 
 class SSRSampleController extends Controller {
     public function getData() {
-      $data = ['test'=>'hello world'];
-  
+      $data = [
+        'test'=>'hello world',
+        "kimserver"=>"taekyung"
+      ];
+      
       return view('ssrSample', [
-        'packages' => $this->getPackages(),
+        'packages' => $data,
       ]);
     }
     private function getPackages(): array

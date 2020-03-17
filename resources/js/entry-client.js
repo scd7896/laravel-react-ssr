@@ -6,8 +6,10 @@ import { BrowserRouter } from 'react-router-dom';
 const { packages } = window.__PRELOADED_STATE__;
 
 render(
-    <BrowserRouter>
-        <App packages={packages} />
-    </BrowserRouter>,
+    <div>
+        <BrowserRouter>
+            <App packages={packages} />
+        </BrowserRouter>
+    </div>,
     document.getElementById('app')
 );

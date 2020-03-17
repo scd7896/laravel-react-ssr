@@ -1,15 +1,13 @@
-import React from 'react';
+import React,{ useState, useEffect } from 'react';
 import Home from './components/Home';
 import Packages from './components/Packages';
 import { withRouter, Route, Link } from 'react-router-dom';
 
-const App = ({ packages, location, url }) => {
-    console.log(packages);
-    console.log(url);
+const App = ({ packages, location }) => {
     return(
         <div>
             <Link
-                to="/react/">
+                to='/react'>
                     <span>
                         아무튼 돌아가기
                         {location.pathname}

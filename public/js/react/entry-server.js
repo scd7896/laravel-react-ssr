@@ -10417,12 +10417,9 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 var App = function App(_ref) {
   var packages = _ref.packages,
-      location = _ref.location,
-      url = _ref.url;
-  console.log(packages);
-  console.log(url);
+      location = _ref.location;
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
-    to: "/react/"
+    to: "/react"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "\uC544\uBB34\uD2BC \uB3CC\uC544\uAC00\uAE30", location.pathname)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
     exact: true,
     path: "/react",
@@ -10457,12 +10454,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _hooks_useSSREffect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../hooks/useSSREffect */ "./resources/js/hooks/useSSREffect.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
 var Home = function Home(_ref) {
   var packages = _ref.packages;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "hello home good", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('laravelTest'),
+      _useState2 = _slicedToArray(_useState, 2),
+      abc = _useState2[0],
+      setAbc = _useState2[1];
+
+  Object(_hooks_useSSREffect__WEBPACK_IMPORTED_MODULE_2__["default"])(function () {
+    setAbc('useEffect는 적용어케됨?');
+  }, []);
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "hello home good"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, abc), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/react/packages"
   }, "\uC544\uBB34\uD2BC\uC5B4\uB514\uB860\uAC00\uAC00\uBC84\uB9AC\uAE30"));
 };
@@ -10488,8 +10504,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var Packages = function Packages(_ref) {
   var packages = _ref.packages;
-  console.log('패키지 굿굿', packages);
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "hello \uD328\uD0A4\uC9C0 \uAD7F good", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "hello \uD328\uD0A4\uC9C0 \uAD7F good"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     to: "/react/packages"
   }, "\uC544\uBB34\uD2BC\uC5B4\uB514\uB860\uAC00\uAC00\uBC84\uB9AC\uAE30"));
 };
@@ -10518,17 +10533,30 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var _context = context,
-    packages = _context.packages,
-    url = _context.url;
-var html = react_dom_server__WEBPACK_IMPORTED_MODULE_2___default.a.renderToString(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-  id: "app"
-}, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["StaticRouter"], {
+    packages = _context.packages;
+var html = react_dom_server__WEBPACK_IMPORTED_MODULE_2___default.a.renderToString(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["StaticRouter"], {
   location: context.url
 }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_app__WEBPACK_IMPORTED_MODULE_0__["default"], {
-  packages: packages,
-  url: url
-}))));
+  packages: packages
+})));
 dispatch(html);
+
+/***/ }),
+
+/***/ "./resources/js/hooks/useSSREffect.js":
+/*!********************************************!*\
+  !*** ./resources/js/hooks/useSSREffect.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var useSSREffect = typeof window === 'undefined' ? react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"] : react__WEBPACK_IMPORTED_MODULE_0__["useEffect"];
+/* harmony default export */ __webpack_exports__["default"] = (useSSREffect);
 
 /***/ }),
 
@@ -10539,7 +10567,7 @@ dispatch(html);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\scd7896\Desktop\laravel_react_ssr\react_ssr\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! /Users/kimserver/GitHub/laravel_react_ssr/laravel-react-ssr/resources/js/entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })
