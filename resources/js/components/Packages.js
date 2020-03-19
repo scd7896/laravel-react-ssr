@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Packages = ({ packages }) => {
+const Packages = (props) => {
+    console.log(props);
     return(
         <div>
             <p>hello 패키지 굿 good</p>
