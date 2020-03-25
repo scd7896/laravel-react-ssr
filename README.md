@@ -1,78 +1,73 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# laravel + react + ssr 날로먹기 
+리액트로 ssr을 구현하기 상당히 귀찮은 부분이 많다.   
+하지만 생각보다 laravel laravel-mix라는 간편한 웹팩 번들을 도와주는 라이브러리도 있고, 그것을 적극 활용해서, react, vue를 프로젝트에 쉽게 쓸 수 있다.  
+하지만 맹점이 있는데, 바로 기본적으로 blade파일에서 그려주지 않으면 검색엔진에 드러나지 않는다.  
+그래서 리액트 코드도 검색엔진에서 인식 할 수 있게 하면 좀 더 나은 SEO를 만들 수 있다.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## SSR 과 CSR
+두 가지의 차이는 서버에서 그려준 것을 받아서 쓰느냐, 클라이언트가 필요 파일을 가져가서 그려내느냐의 차이가 된다.  
+사실 이 두가지는 대립을 하는 것이 절대 아니다. 단지 역할이 나누어져 있는 것 뿐이다.  
+따라서 한 가지를 쓴다고, 다른 한 가지를 배제하면 절대 하면 안된다.  
+SSR의 범위가 넓으면 많은 부분을 검색엔진에 드러내준다. 하지만 그 만큼 서버에 부담을 주게 된다.  
+CSR의 범위가 넓으면 검색엔진에서 상당히 불리해지만, 그 만큼 서버의 부담을 줄여준다.  
 
-## About Laravel
+## 개요  
+현재 많은 프론트 개발자들은 SSR을 구현해야한다고 하면, 일단 서버를 분리해야만 구현이 가능하다 생각한다.    
+그리고 Next.js를 도입해서 구현을한다.  
+우선 이 방식은 상당히 이상적인 방식이다. 나도 둘을 분리만 할 수 있다고 한다면 반드시 이런식으로 구현 하고 싶다.  
+하지만 현실은 스프링, 장고, 라라벨 등의 프레임워크로 만들어진 상태에서, SEO 최적화를 해야하는 어쩔 수 없는 상황이 되니까 하는 경우가 많다.  
+이럴 때 레거시 코드들을 서버를 분리해서 다시 구현할 수 있으면 다행이지만, 여러 이유들이 있어서 대부분을 그럴 수가 없다.  
+그럼 이제 방법은 리액트 코드를 드러내던가, 아니면 리액트코드가 SSR이 되게 하던가. 라는 숙제를 받는다.  
+기본적으로 React 로 SSR 구현하기는 룰이 단순하다.  
+1. 언어별로 js를 실행 시킬 수 있는 무언가를 설치한다. (백)
+2. 그 무언가로 리액트의 가장 루트 파일을 실행 시키면서, 자신의 라우팅 정보를 넘겨준다. (백)
+3. React 코드에서는 기존 render 함수 대신 renderToString 함수로 만들어진 결과를 리턴한다.(클)  
+4. 3에서 받은 값을 보내준다.(백)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 본격적으로 larvel + react + ssr 날로먹기
+우선 위에서 말한 1을 설치한다.
+`composer require spatie/laravel-server-side-rendering`
+`php artisan vendor:publish --provider="Spatie\Ssr\SsrServiceProvider" --tag="config"`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+그리고 `which node`로 node의 위치를 찾아서 .env에 다음 둘을 넣어주고 수정한다.
+`NODE_PATH=/Users/ksk/.nodebrew/current/bin/node`
+`APP_ENV="production"`
+컨트롤러는 블레이드 파일을 render 해주게끔 짠다.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+~~~php
+blade.php 파일
 
-## Learning Laravel
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Laravel + React server side rendering example</title>
+        // 클라이언트 렌더링을 해주는 js 파일을 불러온다.
+        <script defer src="{{ mix('js/react/entry-client.js') }}"></script>
+    </head>
+    <body>
+        <div id="app">
+            
+            {
+                // SSR의 결과물은 html 문자열로 만들어서 실행한다.
+                !! ssr('js/react/entry-server.js') 
+                // 서버에서 받은 정보를 추가로 context에 넣어준다.
+                // js 에서는 context.url 로 url 정보를 가져온다.
+                ->context('packages', $packages)
+                // 실패할경우 보여주는 뷰이다.
+                ->fallback('<div id="fallback">암튼 실패함</div>')
+                ->render() !!
+            }
+        </div>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+        <script>
+            // 이 블레이드 파일을 하단에 있는 js router들은 전부 적용시킨다.
+            window.__PRELOADED_STATE__ = @json(['packages' => $packages])
+        </script>
+    </body>
+</html>
+~~~
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+js 파일은 resources/js의 entry-server.js와 entry-client.js 를 확인한다.
